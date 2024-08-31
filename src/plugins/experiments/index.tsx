@@ -18,11 +18,8 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
-import ErrorBoundary from "@components/ErrorBoundary";
-import { ErrorCard } from "@components/ErrorCard";
 import { Paragraph } from "@components/Paragraph";
 import { Devs, IS_MAC } from "@utils/constants";
-import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findLazy } from "@webpack";
 import { Forms, React } from "@webpack/common";
@@ -75,18 +72,10 @@ export default definePlugin({
         },
         {
             find: 'placeholder:"Search experiments"',
-            replacement: [
-                {
-                    match: /(?<=children:\[)(?=null!=.{0,150}"Installation ID:)/,
-                    replace: "$self.WarningCard(),"
-                },
-                // for some reason the installation id and copy buttons are on
-                // different lines so it looks stupid when the card above is added
-                {
-                    match: /(?<=,marginBottom:16)(?=\},children:\[)/,
-                    replace: ',flexDirection:"row",alignItems:"center"'
-                }
-            ]
+            replacement: {
+                match: /(?<=,marginBottom:16)(?=\},children:\[)/,
+                replace: ',flexDirection:"row",alignItems:"center"'
+            }
         },
         // Change top right toolbar button from the help one to the dev one
         {
@@ -147,25 +136,5 @@ export default definePlugin({
                 </Paragraph>
             </React.Fragment>
         );
-    },
-
-    WarningCard: ErrorBoundary.wrap(() => (
-        <ErrorCard id="vc-experiments-warning-card" className={Margins.bottom16}>
-            <Forms.FormTitle tag="h2">Hold on!!</Forms.FormTitle>
-
-            <Forms.FormText>
-                Experiments are unreleased Discord features. They might not work, or even break your client or get your account disabled.
-            </Forms.FormText>
-
-            <Forms.FormText className={Margins.top8}>
-                Only use experiments if you know what you're doing. Vencord is not responsible for any damage caused by enabling experiments.
-
-                If you don't know what an experiment does, ignore it. Do not ask us what experiments do either, we probably don't know.
-            </Forms.FormText>
-
-            <Forms.FormText className={Margins.top8}>
-                No, you cannot use server-side features like checking the "Send to Client" box.
-            </Forms.FormText>
-        </ErrorCard>
-    ), { noop: true })
+    }
 });
