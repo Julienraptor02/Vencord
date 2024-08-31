@@ -17,8 +17,11 @@
 */
 
 import { migratePluginSettings } from "@api/Settings";
+import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+
+import hideCollapseRoles from "./hideCollapseRoles.css?managed";
 
 migratePluginSettings("AlwaysExpandRoles", "ShowAllRoles");
 export default definePlugin({
@@ -33,5 +36,8 @@ export default definePlugin({
                 replace: (_, rest, setExpandedRoles) => `${rest}!0)`
             }
         }
-    ]
+    ],
+
+    start: () => enableStyle(hideCollapseRoles),
+    stop: () => disableStyle(hideCollapseRoles),
 });
