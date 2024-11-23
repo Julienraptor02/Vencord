@@ -28,18 +28,10 @@ export default definePlugin({
     patches: [
         {
             find: "hasDeveloperContextMenu:",
-            replacement: [
-                {
-                    match: /(?<=\?\i\.current\[\i\].{0,100}?)useState\(!1\)/,
-                    replace: "useState(!0)"
-                },
-                {
-                    // Fix not calculating non-expanded roles because the above patch makes the default "expanded",
-                    // which makes the collapse button never show up and calculation never occur
-                    match: /(?<=useLayoutEffect\(\(\)=>\{if\()\i/,
-                    replace: "false"
-                }
-            ]
+            replacement: {
+                match: /(?<=\?\i\.current\[\i\].{0,100}?)useState\(!1\)/,
+                replace: "useState(!0)"
+            }
         }
     ]
 });
