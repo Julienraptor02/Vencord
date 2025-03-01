@@ -5,10 +5,9 @@
  */
 
 import * as DataStore from "@api/DataStore";
-import { classNameFactory } from "@api/Styles";
 import { Margins } from "@utils/margins";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/modal";
-import { Button, Forms, SearchableSelect, useMemo, useState } from "@webpack/common";
+import { RenderModalProps } from "@vencord/discord-types";
+import { Forms, Modal, SearchableSelect, useMemo, useState } from "@webpack/common";
 
 import { DATASTORE_KEY, timezones } from ".";
 
@@ -17,9 +16,7 @@ export async function setUserTimezone(userId: string, timezone: string | null) {
     await DataStore.set(DATASTORE_KEY, timezones);
 }
 
-const cl = classNameFactory("vc-timezone-");
-
-export function SetTimezoneModal({ userId, modalProps }: { userId: string, modalProps: ModalProps; }) {
+export function SetTimezoneModal({ userId, modalProps }: { userId: string, modalProps: RenderModalProps; }) {
     const [currentValue, setCurrentValue] = useState<string | null>(timezones[userId] ?? null);
 
     const options = useMemo(() => {
@@ -33,53 +30,43 @@ export function SetTimezoneModal({ userId, modalProps }: { userId: string, modal
     }, []);
 
     return (
-        <ModalRoot {...modalProps}>
-            <ModalHeader className={cl("modal-header")}>
-                <Forms.FormTitle tag="h2">
-                    Timezones
-                </Forms.FormTitle>
-                <ModalCloseButton onClick={modalProps.onClose} />
-            </ModalHeader>
-
-            <ModalContent className={cl("modal-content")}>
-                <section className={Margins.bottom16}>
-                    <Forms.FormTitle tag="h3">
-                        Select Timezone
-                    </Forms.FormTitle>
-
-                    <SearchableSelect
-                        options={options}
-                        value={options.find(o => o.value === currentValue)}
-                        placeholder={"Select a Timezone"}
-                        maxVisibleItems={5}
-                        closeOnSelect={true}
-                        onChange={v => setCurrentValue(v)}
-                    />
-                </section>
-            </ModalContent>
-
-            <ModalFooter className={cl("modal-footer")}>
-                <Button
-                    color={Button.Colors.RED}
-                    onClick={async () => {
+        <Modal
+            {...modalProps}
+            title="Timezones"
+            actions={[
+                {
+                    text: "Delete Timezone",
+                    variant: "critical-primary",
+                    onClick: async () => {
                         await setUserTimezone(userId, null);
                         modalProps.onClose();
-                    }}
-                >
-                    Delete Timezone
-                </Button>
-                <Button
-                    color={Button.Colors.BRAND}
-                    disabled={currentValue === null}
-                    onClick={async () => {
+                    }
+                },
+                {
+                    text: "Save",
+                    variant: "primary",
+                    onClick: async () => {
                         await setUserTimezone(userId, currentValue!);
                         modalProps.onClose();
-                    }}
-                >
-                    Save
-                </Button>
-            </ModalFooter>
-        </ModalRoot>
+                    },
+                    disabled: currentValue === null
+                }
+            ]}
+        >
+            <section className={Margins.bottom16}>
+                <Forms.FormTitle tag="h3">
+                    Select Timezone
+                </Forms.FormTitle>
+
+                <SearchableSelect
+                    options={options}
+                    value={options.find(o => o.value === currentValue)}
+                    placeholder={"Select a Timezone"}
+                    maxVisibleItems={5}
+                    closeOnSelect={true}
+                    onChange={v => setCurrentValue(v)}
+                />
+            </section>
+        </Modal>
     );
 }
-
