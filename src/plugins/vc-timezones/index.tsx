@@ -13,9 +13,9 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { openModal } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
+import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { i18n, Menu, Tooltip, useEffect, useState } from "@webpack/common";
-import { Message, User } from "discord-types/general";
 
 import { SetTimezoneModal } from "./TimezoneModal";
 
@@ -32,7 +32,7 @@ export const settings = definePluginSettings({
     "24h Time": {
         type: OptionType.BOOLEAN,
         description: "Show time in 24h format",
-        default: false
+        default: true
     },
 
     showMessageHeaderTime: {
@@ -86,14 +86,13 @@ const TimestampComponent = ErrorBoundary.wrap(({ userId, timestamp, type }: Prop
 
     if (!timezone) return null;
 
-    const shortTime = getTime(timezone, currentTime, { hour: "numeric", minute: "numeric" });
+    const shortTime = getTime(timezone, currentTime, {
+        dateStyle: "short",
+        timeStyle: "short"
+    });
     const longTime = getTime(timezone, currentTime, {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
+        dateStyle: "full",
+        timeStyle: "short"
     });
     return (
         <Tooltip
@@ -134,7 +133,7 @@ export default definePlugin({
             find: 'backgroundColor:"COMPLETE"',
             replacement: {
                 // probably bad
-                match: /(?<="foreignObject",.+?)children:\[/,
+                match: /(\.banner,.+?)children:\[/,
                 replace: "$&$self.renderProfileTimezone(arguments[0]),"
             }
         },
