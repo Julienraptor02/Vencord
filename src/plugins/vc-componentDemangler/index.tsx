@@ -68,7 +68,7 @@ function setComponentName(maybeComponent: any, name: string): void {
 }
 export default definePlugin({
     name: "ComponentDemangler",
-    description: "",
+    description: "Make React DevTools nicer to use",
     authors: [Devs.sadan],
     startAt: StartAt.Init,
     patches: [
