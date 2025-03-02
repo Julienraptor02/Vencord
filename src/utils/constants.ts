@@ -623,7 +623,11 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     },
     u32: {
         name: "u32",
-        id: 1063237286818488351n,
+        id: 1063237286818488351n
+    },
+    Mafineek: {
+        name: "mafineeek",
+        id: 854342480019587133n
     },
     prism: {
         name: "prism",
