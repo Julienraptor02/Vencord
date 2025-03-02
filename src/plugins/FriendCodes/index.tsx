@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 import FriendCodesPanel from "./components/FriendCodesPanel";
@@ -11,7 +12,7 @@ import FriendCodesPanel from "./components/FriendCodesPanel";
 export default definePlugin({
     name: "FriendCodes",
     description: "Generate FriendCodes to easily add friends",
-    authors: [{ name: "domi.btnr", id: 354191516979429376n }],
+    authors: [Devs.Domi],
     patches: [
         {
             find: "#{intl::ADD_FRIEND})}),(",
