@@ -144,8 +144,8 @@ const ChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
             <svg
                 aria-hidden="true"
                 role="img"
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 style={{ scale: "1.2" }}
             >
