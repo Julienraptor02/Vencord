@@ -90,6 +90,14 @@ export default definePlugin({
                 match: /\i\.isStaff\(\)/,
                 replace: "true"
             }
+        },
+        // enable experiment embed on sent experiment links
+        {
+            find: "dev://experiment/",
+            replacement: {
+                match: /\i\.isStaff\(\)/,
+                replace: "true"
+            }
         }
     ],
 
