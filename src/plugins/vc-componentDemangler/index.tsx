@@ -121,7 +121,7 @@ const unseenValues = new Set<string>(map.map(([filter, name]) => name));
 export default definePlugin({
     // Avoid conflict with https://github.com/Vendicated/Vencord/pull/3257
     name: "ComponentDemangler_",
-    description: "",
+    description: "Make React DevTools nicer to use",
     authors: [Devs.sadan],
     startAt: StartAt.Init,
     patches: [
