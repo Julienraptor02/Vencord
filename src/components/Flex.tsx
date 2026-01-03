@@ -27,15 +27,15 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Flex({ flexDirection, gap = "1em", justifyContent, alignItems, flexWrap, children, style, ...restProps }: FlexProps) {
-    style = {
+    style ??= {};
+    Object.assign(style, {
         display: "flex",
         flexDirection,
         gap,
         justifyContent,
         alignItems,
-        flexWrap,
-        ...style
-    };
+        flexWrap
+    });
 
     return (
         <div style={style} {...restProps}>
