@@ -9,14 +9,14 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "FixImagesQuality",
-    description: "Improves quality of images by forcing the original source to be used.",
+    description: "Improves quality of images in chat by forcing png format",
     authors: [Devs.Nuckyz],
     patches: [
         {
             find: ".handleImageLoad)",
             replacement: {
-                match: /getSrc\(\i\)\{/,
-                replace: "$& return this.props.src;"
+                match: /(?<=\i=)"webp"/,
+                replace: '"png"'
             }
         }
     ]
