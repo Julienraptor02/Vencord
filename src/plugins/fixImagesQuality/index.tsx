@@ -67,6 +67,7 @@ export default definePlugin({
             const { contentType, height, mediaLayoutType, src, width } = props;
             if (!contentType?.startsWith("image/") || src.startsWith("data:")) return;
 
+            console.log({ src, freeze });
             const url = new URL(src);
             url.searchParams.set("animated", String(!freeze));
 
