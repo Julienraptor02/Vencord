@@ -7,7 +7,6 @@
 import { definePluginSettings } from "@api/Settings";
 import { Card } from "@components/Card";
 import { Flex } from "@components/Flex";
-import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
@@ -16,7 +15,7 @@ import definePlugin, { OptionType } from "@utils/types";
 const settings = definePluginSettings({
     originalImagesInChat: {
         type: OptionType.BOOLEAN,
-        description: "Also load the original image in Chat. WARNING: Read the caveats above",
+        description: "Also load the original image in Chat",
         default: false,
     }
 });
@@ -32,7 +31,7 @@ export default definePlugin({
             find: ".handleImageLoad)",
             replacement: {
                 match: /getSrc\(\i\)\{/,
-                replace: "$&var _vcSrc=$self.getSrc(this.props,arguments[1]);if(_vcSrc)return _vcSrc;"
+                replace: "$&var _vcSrc=$self.getSrc(this.props);if(_vcSrc)return _vcSrc;"
             }
         }
     ],
@@ -48,49 +47,36 @@ export default definePlugin({
                             <li>&mdash; In the image modal, the original image will be loaded.</li>
                         </ul>
                     </Paragraph>
-                    <Paragraph size="md" weight="semibold" className={Margins.top8}>You can also enable original image in chat, but beware of the following caveats:</Paragraph>
                     <Paragraph>
-                        <ul>
-                            <li>&mdash; Animated images (GIF, WebP, etc.) in chat will always animate, regardless of if the App is focused.</li>
-                            <li>&mdash; May cause lag.</li>
-                        </ul>
+                        You can also enable original image in chat, but this may cause performance issues!
                     </Paragraph>
                 </Flex>
             </Card>
         );
     },
 
-    getSrc(props: { src: string; mediaLayoutType: string; width: number; height: number; contentType: string; }, freeze?: boolean) {
-        if (!props?.src) return;
+    getSrc(props: { src: string; mediaLayoutType: string; width: number; height: number; }) {
+        if (!props) return;
 
         try {
-            const { contentType, height, mediaLayoutType, src, width } = props;
-            if (!contentType?.startsWith("image/") || src.startsWith("data:")) return;
-
-            console.log({ src, freeze });
-            const url = new URL(src);
-            url.searchParams.set("animated", String(!freeze));
-
-            if (!settings.store.originalImagesInChat && mediaLayoutType === "MOSAIC") {
+            if (!settings.store.originalImagesInChat && props.mediaLayoutType === "MOSAIC") {
                 // make sure the image is not too large
-                const pixels = width * height;
+                const pixels = props.width * props.height;
                 const limit = 2000 * 1200;
 
-                if (pixels <= limit)
-                    return url.toString();
+                if (pixels <= limit) return props.src;
 
                 const scale = Math.sqrt(pixels / limit);
-
-                url.searchParams.set("width", Math.round(width / scale).toString());
-                url.searchParams.set("height", Math.round(height / scale).toString());
+                const url = new URL(props.src);
+                url.searchParams.set("width", Math.round(props.width / scale).toString());
+                url.searchParams.set("height", Math.round(props.height / scale).toString());
                 return url.toString();
             }
 
-            url.hostname = "cdn.discordapp.com";
-            return url.toString();
+            return props.src?.replace("https://media.discordapp.net/attachments/", "https://cdn.discordapp.com/attachments/");
         } catch (e) {
             new Logger("FixImagesQuality").error("Failed to make image src", e);
-            return;
+            return props.src;
         }
     }
 });
