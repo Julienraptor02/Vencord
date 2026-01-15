@@ -74,10 +74,11 @@ export default definePlugin({
             const url = new URL(src);
             if (!url.pathname.startsWith("/attachments/")) return;
 
-            url.searchParams.set("animated", String(!freeze));
-            if (freeze && url.pathname.endsWith(".gif")) {
-                // gifs don't support animated=false, so we have no choice but to use webp
-                url.searchParams.set("format", "webp");
+            if (freeze) {
+                url.searchParams.set("animated", "false");
+
+                if (url.pathname.endsWith(".gif"))
+                    url.searchParams.set("format", "webp");
             }
 
             const isModal = !!trigger;
