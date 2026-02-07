@@ -65,13 +65,11 @@ export default definePlugin({
                         // DMs
                         if (channel.type === 1) return `@${(() => {
                             const user = UserStore.getUser(channel.recipients[0]);
-                            // @ts-expect-error
                             return user.globalName || user.username;
                         })()}`;
                         // GDMs
                         if (channel.type === 3) return channel.name || (() => {
                             const users = channel.recipients.map(r => UserStore.getUser(r));
-                            // @ts-expect-error
                             return users.map(u => u.globalName || u.username).join(", ");
                         })();
                         // Threads
