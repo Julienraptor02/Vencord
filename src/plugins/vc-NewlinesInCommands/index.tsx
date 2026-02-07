@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NewlinesInCommands",
     description: "Allows shift+enter to create new lines in command inputs.",
-    authors: [{ id: 772601756776923187n, name: "Suffocate" }],
+    authors: [Devs.Suffocate],
 
     patches: [
         {
