@@ -7,6 +7,7 @@
 import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import { updateMessage } from "@api/MessageUpdater";
 import { ImageInvisible, ImageVisible } from "@components/Icons";
+import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { parseUrl } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -46,7 +47,7 @@ const addButton = (children, message, url) => {
                 label="Show Embed"
                 action={_ => unfurlEmbed(url, message)}
                 icon={ImageVisible}
-                key="vc-sme-show"/>);
+                key="vc-sme-show" />);
     } else if (isUrlInMessage(message, url)) { // check the url is actually in the message text so we know it's one people can actually add back
         children.splice(0, 0,
             <Menu.MenuItem
@@ -54,7 +55,7 @@ const addButton = (children, message, url) => {
                 label="Remove Embed"
                 action={_ => removeEmbed(url, message)}
                 icon={ImageInvisible}
-                key="vc-sme-remove"/>);
+                key="vc-sme-remove" />);
     }
 };
 
@@ -192,7 +193,7 @@ function showFailureToast(message: string) {
 export default definePlugin({
     name: "ShowMessageEmbeds",
     description: "Adds a context menu option to show embeds for links that don't have one",
-    authors: [{ id: 772601756776923187n, name: "Suffocate" }],
+    authors: [Devs.Suffocate],
 
     patches: [
         {
