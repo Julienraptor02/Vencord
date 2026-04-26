@@ -9,12 +9,7 @@ import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
 import { makeCodeblock } from "@utils/text";
 import { ReplaceFn } from "@utils/types";
 import { Button, Forms, Parser, useMemo, useState } from "@webpack/common";
-import type { Change } from "diff";
-
-// Do not include diff in non dev builds (side effects import)
-if (IS_DEV) {
-    var differ = require("diff") as typeof import("diff");
-}
+import { type Change, diffWordsWithSpace } from "diff";
 
 interface PatchPreviewProps {
     module: [id: number, factory: Function];
@@ -37,7 +32,7 @@ function makeDiff(original: string, patched: string, match: RegExpMatchArray | n
     const context = original.slice(start, end);
     const patchedContext = patched.slice(start, endPatched);
 
-    return differ.diffWordsWithSpace(context, patchedContext);
+    return diffWordsWithSpace(context, patchedContext);
 }
 
 function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
