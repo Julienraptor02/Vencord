@@ -208,7 +208,7 @@ export default definePlugin({
                 Component: BackupAndRestoreTab,
                 Icon: BackupRestoreIcon
             }),
-            IS_DEV && PatchHelperTab && buildEntry({
+            PatchHelperTab && buildEntry({
                 key: "vencord_patch_helper",
                 title: "Patch Helper",
                 Component: PatchHelperTab,
