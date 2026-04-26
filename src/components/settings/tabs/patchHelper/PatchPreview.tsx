@@ -11,10 +11,7 @@ import { ReplaceFn } from "@utils/types";
 import { Button, Forms, Parser, useMemo, useState } from "@webpack/common";
 import type { Change } from "diff";
 
-// Do not include diff in non dev builds (side effects import)
-if (IS_DEV) {
-    var differ = require("diff") as typeof import("diff");
-}
+var differ = require("diff") as typeof import("diff");
 
 interface PatchPreviewProps {
     module: [id: number, factory: Function];
