@@ -10,6 +10,7 @@ import definePlugin from "@utils/types";
 export default definePlugin({
     name: "FixImagesQuality",
     description: "Improves quality of images in chat by forcing png format",
+    tags: ["Media", "Appearance"],
     authors: [Devs.Nuckyz],
     patches: [
         {
